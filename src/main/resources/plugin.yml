@@ -1,0 +1,6 @@
+name: ResinData
+version: '${project.version}'
+main: dev.cognitivity.resingens.resindata.ResinData
+api-version: 1.20
+authors: [ cognitivity ]
+description: Data API for ResinGens

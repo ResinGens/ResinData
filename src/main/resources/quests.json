@@ -1,0 +1,58 @@
+[
+  {
+    "id": "do_something",
+    "name": "Do something",
+    "updates": [
+      {
+        "description": "Talk to the NPC.",
+        "npc": "Someone",
+        "location": "Pond"
+      },
+      {
+        "description": "Give the NPC 5 fish.",
+        "npc": "Someone",
+        "location": "Pond"
+      }
+    ],
+    "requires": [
+    ]
+  },
+  {
+    "id": "something_else",
+    "name": "Do something else",
+    "updates": [
+      {
+        "description": "Talk to the other NPC.",
+        "npc": "Someone else",
+        "location": "Pond"
+      },
+      {
+        "description": "Give the other NPC 5 fish.",
+        "npc": "Someone else",
+        "location": "Pond"
+      }
+    ],
+    "requires": [
+    ]
+  },
+  {
+    "id": "something_else_part_two",
+    "name": "Do something else",
+    "updates": [
+      {
+        "description": "Talk to the other other NPC.",
+        "npc": "Someone else else",
+        "location": "Pond"
+      },
+      {
+        "description": "Give the other other NPC 5 fish.",
+        "npc": "Someone else else",
+        "location": "Pond"
+      }
+    ],
+    "requires": [
+      {"level": 5},
+      {"quest": "something_else"}
+    ]
+  }
+]
