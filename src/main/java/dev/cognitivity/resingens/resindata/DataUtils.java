@@ -76,5 +76,45 @@ public class DataUtils {
     public static double round(double n, int r) {
         return Math.round(n * Math.pow(10, r)) / Math.pow(10, r);
     }
-
+    public static String timeUntil(long end) {
+        return timeUntil(System.currentTimeMillis(), end);
+    }
+    public static String timeUntil(long start, long end) {
+        return timeLength(end - start);
+    }
+    public static String timeLength(long time) {
+        if(time <= 0) {
+            return "0 ms";
+        }
+        long years = (long) Math.floor((double) time / 31536000000L);
+        time %= 31536000000L;
+        long days = (long) Math.floor((double) time / 86400000);
+        time %= 86400000;
+        long hours = (long) Math.floor((double) time / 3600000);
+        time %= 3600000;
+        long minutes = (long) Math.floor((double) time / 60000);
+        time %= 60000;
+        long seconds = (long) Math.floor((double) time / 1000);
+        long milliseconds = time % 1000;
+        StringBuilder stringBuilder = new StringBuilder();
+        if(years != 0) {
+            stringBuilder.append(years).append("y ");
+        }
+        if(days != 0) {
+            stringBuilder.append(days).append("d ");
+        }
+        if(hours != 0) {
+            stringBuilder.append(hours).append("h ");
+        }
+        if(minutes != 0) {
+            stringBuilder.append(minutes).append("m ");
+        }
+        if(seconds != 0) {
+            stringBuilder.append(seconds).append("s ");
+        }
+        if(years == 0 && days == 0 && hours == 0 && minutes == 0 && seconds == 0) {
+            stringBuilder.append(milliseconds).append("ms");
+        }
+        return stringBuilder.toString().trim();
+    }
 }

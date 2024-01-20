@@ -5,6 +5,7 @@ import dev.cognitivity.resingens.resindata.data.PlayerData;
 import dev.cognitivity.resingens.resindata.listeners.JoinListener;
 import dev.cognitivity.resingens.resindata.listeners.PacketListener;
 import dev.cognitivity.resingens.resindata.listeners.QuitListener;
+import dev.cognitivity.resingens.resindata.punishment.PunishmentManager;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import lombok.Getter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -22,6 +23,7 @@ public final class ResinData extends JavaPlugin {
     @Getter private static ResinData instance;
     @Getter private final ArrayList<PlayerData> dataList = new ArrayList<>();
     @Getter private static File dataPath;
+    @Getter private PunishmentManager punishmentManager;
 
     @Override
     public void onLoad() {
@@ -34,6 +36,7 @@ public final class ResinData extends JavaPlugin {
         instance = this;
         dataPath = new File(getDataFolder().getAbsolutePath() + File.separator + "players");
         PacketEvents.getAPI().init();
+        punishmentManager = new PunishmentManager();
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
         getServer().getPluginManager().registerEvents(new QuitListener(), this);
         PacketEvents.getAPI().getEventManager().registerListener(new PacketListener());
@@ -108,6 +111,7 @@ public final class ResinData extends JavaPlugin {
      * Saves everyone's stats to their JSON file.
      * @see ResinData#saveData(Player)
      */
+    @SuppressWarnings("unused")
     public void saveAll() {
         Collection<? extends Player> players = getServer().getOnlinePlayers();
         Collection<? extends Player> staff = players.stream().filter(player -> player.hasPermission("valorant.staff")).toList();

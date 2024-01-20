@@ -7,6 +7,7 @@ import com.google.gson.JsonPrimitive;
 import dev.cognitivity.resingens.resindata.DataUtils;
 import dev.cognitivity.resingens.resindata.Messages;
 import dev.cognitivity.resingens.resindata.ResinData;
+import dev.cognitivity.resingens.resindata.punishment.Punishment;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.OfflinePlayer;
@@ -24,6 +25,7 @@ public class PlayerData {
     private final File file;
 
     private ArrayList<PlayerQuest> quests = new ArrayList<>();
+    private final ArrayList<Punishment> punishments = new ArrayList<>();
     private long discordId;
 
     public PlayerData(@NotNull OfflinePlayer player) {
@@ -116,7 +118,13 @@ public class PlayerData {
 
         JsonArray discord = dataFile.getAsJsonArray("data").get(2).getAsJsonObject().getAsJsonArray("discord");
         set(discord, 0, "id", discordId);
-        
+        JsonArray punishmentsArray = new JsonArray();
+        JsonObject punishmentsObject = new JsonObject();
+        punishmentsObject.add("punishments", punishmentsArray);
+
+        this.punishments.stream().filter(Objects::nonNull).map(Punishment::getPID).forEach(punishmentsArray::add);
+        data.set(3, punishmentsObject);
+
         DataUtils.writeJSONObject(file, dataFile);
         double ms = DataUtils.round((float) (System.nanoTime() - start)/1000000, 2);
         if(player.isOnline()) Objects.requireNonNull(player.getPlayer()).sendMessage(Messages.SAVED_DATA.getMessage(ms));
@@ -139,10 +147,16 @@ public class PlayerData {
                 quests.add(quest);
             }
         }
-        JsonArray discord = data.get(2).getAsJsonObject().getAsJsonArray("discord");
-        discordId = discord.get(0).getAsJsonObject().get("id").getAsLong();
         JsonArray nameHistory = profile.get(1).getAsJsonObject().getAsJsonArray("nameHistory");
         if(player.getName() != null && !nameHistory.contains(new JsonPrimitive(player.getName()))) nameHistory.add(player.getName());
+
+        JsonArray discord = data.get(2).getAsJsonObject().getAsJsonArray("discord");
+        discordId = discord.get(0).getAsJsonObject().get("id").getAsLong();
+
+        JsonArray punishmentsArray = data.get(3).getAsJsonObject().get("punishments").getAsJsonArray();
+        punishments.clear();
+        punishments.addAll(punishmentsArray.asList().stream().map(punishment -> Punishment.of(punishment.getAsInt())).toList());
+
         DataUtils.writeJSONObject(file, dataFile);
     }
 
