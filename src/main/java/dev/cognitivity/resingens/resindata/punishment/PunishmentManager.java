@@ -24,7 +24,7 @@ public class PunishmentManager {
                 punishmentsObject.add("punishments", punishmentsArray);
                 DataUtils.writeJSONObject(punishmentFile, punishmentsObject);
             }
-            JsonObject punishmentsObject = DataUtils.parseJSON(punishmentFile);
+            JsonObject punishmentsObject = DataUtils.parseJson(punishmentFile);
             assert punishmentsObject != null;
             JsonArray punishmentsArray = punishmentsObject.get("punishments").getAsJsonArray();
             for(JsonElement element : punishmentsArray) {
@@ -37,7 +37,7 @@ public class PunishmentManager {
     }
     public void addPunishment(Punishment punishment) {
         punishments.add(punishment);
-        JsonObject punishmentsObject = DataUtils.parseJSON(punishmentFile);
+        JsonObject punishmentsObject = DataUtils.parseJson(punishmentFile);
         assert punishmentsObject != null;
         JsonArray punishmentsArray = punishmentsObject.get("punishments").getAsJsonArray();
         punishmentsArray.add(punishment.getAsJson());
@@ -49,7 +49,7 @@ public class PunishmentManager {
         punishments.remove(punishment);
     }
     public JsonObject getJsonObject() {
-        return DataUtils.parseJSON(punishmentFile);
+        return DataUtils.parseJson(punishmentFile);
     }
     public JsonArray getJsonArray() {
         return getJsonObject().get("punishments").getAsJsonArray();

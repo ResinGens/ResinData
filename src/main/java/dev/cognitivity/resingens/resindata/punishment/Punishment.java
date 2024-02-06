@@ -123,17 +123,24 @@ public class Punishment {
         data.saveData();
         setActive(false);
         String length = DataUtils.timeLength(this.duration);
+        String startDate = new SimpleDateFormat("dd/MM/yyyy @ HH:mm:ss z").format(new Date(start));
         String ends = new SimpleDateFormat("dd/MM/yyyy @ HH:mm:ss z").format(new Date(end));
         String until = DataUtils.timeUntil(end);
         if (staff != null) {
             switch (punishmentType) {
-                case PERMANENT_BAN -> alert(Messages.PUNISHMENT_REMOVED.getMessage(playerName, "permanently unbanned", staff, "banned", staffName, reason, "Permanent"));
-                case TEMPORARY_BAN ->
-                        alert(Messages.PUNISHMENT_REMOVED.getMessage(playerName, "temporarily unbanned", staff, "banned", staffName, reason, length + " (" + until + " // " + ends + ")"));
-                case PERMANENT_MUTE -> alert(Messages.PUNISHMENT_REMOVED.getMessage(playerName, "permanently unmuted", staff, "muted", staffName, reason, "Permanent"));
-                case TEMPORARY_MUTE ->
-                        alert(Messages.PUNISHMENT_REMOVED.getMessage(playerName, "temporarily unmuted", staff, "muted", staffName, reason, length + " (" + until + " // " + ends + ")"));
+                case PERMANENT_BAN -> alert(Messages.PUNISHMENT_REMOVED_STAFF.getMessage(
+                        playerName, "unbanned", staff, "banned", staffName, reason, "Permanent", "Never"));
+                case TEMPORARY_BAN -> alert(Messages.PUNISHMENT_REMOVED_STAFF.getMessage(
+                        playerName, "unbanned", staff, "banned", staffName, reason, length + " (" + until + " remaining", ends));
+                case PERMANENT_MUTE -> alert(Messages.PUNISHMENT_REMOVED_STAFF.getMessage(
+                        playerName, "unmuted", staff, "muted", staffName, reason, "Permanent", "Never"));
+                case TEMPORARY_MUTE -> alert(Messages.PUNISHMENT_REMOVED_STAFF.getMessage(
+                        playerName, "unmuted", staff, "muted", staffName, reason, length + " (" + until + " remaining", ends));
             }
+        }
+        if(player != null && player.getPlayer() != null) {
+            String type = punishmentType.isBan() ? "ban" : punishmentType.isMute() ? "mute" : punishmentType.isKick() ? "kick" : "warn";
+            player.getPlayer().sendMessage(Messages.PUNISHMENT_REMOVED_PLAYER.getMessage(type, reason, startDate, length, pID));
         }
     }
     
@@ -214,7 +221,7 @@ public class Punishment {
     private void setActive(boolean active) {
         this.active = active;
         File punishmentFile = ResinData.getInstance().getPunishmentManager().getPunishmentFile();
-        JsonObject punishmentsObject = DataUtils.parseJSON(punishmentFile);
+        JsonObject punishmentsObject = DataUtils.parseJson(punishmentFile);
         if(punishmentsObject != null) {
             JsonArray punishmentsArray = punishmentsObject.get("punishments").getAsJsonArray();
             for(JsonElement punishmentElement : punishmentsArray.asList()) {

@@ -15,7 +15,19 @@
       }
     ],
     "requires": [
-    ]
+    ],
+    "onComplete": {
+      "message": [
+        "<yellow>-------------------",
+        "<green><bold>yay you finished the quest somehow",
+        "<green>good job <aqua>{PLAYER}!!!!!!!!!!!!!!!!!!!!!!!1",
+        "<yellow>-------------------"
+      ],
+      "command": [
+        "tellraw @a {\"color\":\"yellow\",\"text\":\"Herobrine joined the game\"}",
+        "give {PLAYER} dirt 6400"
+      ]
+    }
   },
   {
     "id": "something_else",

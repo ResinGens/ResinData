@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 
 public final class ResinData extends JavaPlugin {
     @Getter private static ResinData instance;
@@ -56,20 +55,8 @@ public final class ResinData extends JavaPlugin {
      */
     @SuppressWarnings("UnusedReturnValue")
     public @NotNull PlayerData createData(OfflinePlayer player) {
-        long start = System.nanoTime();
-        if (player.isOnline() && player.getPlayer() != null)
-            Objects.requireNonNull(player.getPlayer()).sendMessage(Messages.LOADING_DATA.getMessage());
         if (dataList.stream().noneMatch(data -> playerEquals(data.getPlayer(), player))) {
-            PlayerData data = addData(player);
-            if (player.isOnline()) {
-                double ms = DataUtils.round((float) (System.nanoTime() - start)/1000000, 2);
-                Objects.requireNonNull(player.getPlayer()).sendMessage(Messages.LOADED_DATA.getMessage(ms));
-            }
-            return data;
-        }
-        if (player.isOnline()) {
-            double ms = DataUtils.round((float) (System.nanoTime() - start)/1000000, 2);
-            Objects.requireNonNull(player.getPlayer()).sendMessage(Messages.LOADED_DATA.getMessage(ms));
+            return addData(player);
         }
         return getData(player);
     }

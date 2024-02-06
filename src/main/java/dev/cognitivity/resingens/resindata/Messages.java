@@ -55,7 +55,6 @@ public enum Messages {
             <gray>Punishment ID: <gold>#%s
             
             <dark_gray>You may appeal this punishment at <aqua><u>discord.gg/example</u>
-            <dark_gray>Reconnect to generate a link code for appeals.
             """),
     KICK_REASON("""
             <red>You have been kicked from ResinGens.
@@ -80,11 +79,24 @@ public enum Messages {
             <aqua>[PUNISHMENT] <white>%s <gray>has been %s by <white>%s<gray>.
               <gray>Reason: <white>"%s"
               <gray>This will %s<gray>."""),
-    PUNISHMENT_REMOVED("""
+    PUNISHMENT_REMOVED_STAFF("""
             <aqua>[PUNISHMENT] <white>%s <gray>has been %s by <white>%s<gray>.
               <gray>Originally %s by: <white>%s
               <gray>Original reason: <white>"%s"
-              <gray>Original punishment length: <white>%s""")
+              <gray>Original punishment length: <white>%s
+              <gray>Original end date: <white>%s"""),
+
+    PUNISHMENT_REMOVED_PLAYER("""
+            
+            <red>Your previous %s has been removed.
+            
+              <gray>Reason: <white>%s
+              <gray>Punished on <white>%s<gray>.
+              <gray>Original punishment length: <white>%s
+              <gray>Punishment ID: <gold>#%s
+
+              """),
+//punishment type, reason, Type, date, id, length
     ;
 
 

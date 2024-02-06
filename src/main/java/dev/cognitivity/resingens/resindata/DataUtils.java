@@ -1,13 +1,11 @@
 package dev.cognitivity.resingens.resindata;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Scanner;
 import java.util.logging.Level;
 
@@ -24,7 +22,7 @@ public class DataUtils {
     }
 
     @Nullable
-    public static JsonObject parseJSON(File file) {
+    public static JsonObject parseJson(File file) {
         try {
             return (JsonObject) JsonParser.parseReader(new FileReader(file.getCanonicalPath()));
         } catch(Exception exception){
@@ -32,12 +30,21 @@ public class DataUtils {
             return null;
         }
     }
-    @Nullable public static JsonObject parseJSON(String json) {
+    @Nullable public static JsonObject parseJson(String json) {
         if(json == null) return null;
         try {
             return (JsonObject) JsonParser.parseString(json);
         } catch (Exception exception) {
-            ResinData.getInstance().getLogger().log(Level.SEVERE, "Failed to parse JSON.", exception);
+            ResinData.getInstance().getLogger().log(Level.SEVERE, "Failed to parse JsonObject.", exception);
+            return null;
+        }
+    }
+    @Nullable public static JsonElement parseJsonElement(String json) {
+        if(json == null) return null;
+        try {
+            return JsonParser.parseString(json);
+        } catch (Exception exception) {
+            ResinData.getInstance().getLogger().log(Level.SEVERE, "Failed to parse JsonElement.", exception);
             return null;
         }
     }
@@ -68,6 +75,21 @@ public class DataUtils {
         } catch(Exception exception) {
             ResinData.getInstance().getLogger().log(Level.SEVERE, "Failed to read "+file.getPath(), exception);
             return "-";
+        }
+    }
+    public static String readInputStream(InputStream inputStream) {
+        if (inputStream == null) return null;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder builder = new StringBuilder();
+        try {
+            String nextline;
+            while ((nextline = reader.readLine()) != null) {
+                builder.append(nextline);
+            }
+            return builder.toString();
+        } catch(Exception exception) {
+            ResinData.getInstance().getLogger().log(Level.SEVERE, "Failed to read InputStream.", exception);
+            return null;
         }
     }
     public static double round(float n, int r) {
