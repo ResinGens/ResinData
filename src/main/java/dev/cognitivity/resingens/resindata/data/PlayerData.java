@@ -27,6 +27,7 @@ public class PlayerData {
 
     private ArrayList<PlayerQuest> quests = new ArrayList<>();
     private final ArrayList<Punishment> punishments = new ArrayList<>();
+    private final ArrayList<String> hashedIps = new ArrayList<>();
     private long discordId;
 
     public PlayerData(@NotNull OfflinePlayer player) {
@@ -45,6 +46,10 @@ public class PlayerData {
         JsonObject dataObject = new JsonObject();
         dataObject.addProperty("version", DataUpdater.getDataVersion());
         JsonObject profileObject = new JsonObject();
+
+        JsonArray ipArray = new JsonArray();
+        hashedIps.forEach(ipArray::add);
+        profileObject.add("addresses", ipArray);
 
         long firstPlayed = player.getFirstPlayed();
         if(firstPlayed == 0) firstPlayed = System.currentTimeMillis();
@@ -91,6 +96,12 @@ public class PlayerData {
         JsonObject data = DataUtils.parseJson(file);
         assert data != null;
 
+        JsonObject profileObject = data.get("profile").getAsJsonObject();
+
+        JsonArray ipArray = new JsonArray();
+        hashedIps.forEach(ipArray::add);
+        profileObject.add("addresses", ipArray);
+
         JsonObject statistics = data.get("statistics").getAsJsonObject();
 
         JsonArray questsArray = new JsonArray();
@@ -123,6 +134,11 @@ public class PlayerData {
         JsonObject data = DataUtils.parseJson(file);
         assert data != null;
         JsonObject profile = data.get("profile").getAsJsonObject();
+
+        JsonArray ipArray = profile.get("addresses").getAsJsonArray();
+        hashedIps.clear();
+        ipArray.forEach(ip -> hashedIps.add(ip.getAsString()));
+
         JsonObject statistics = data.get("statistics").getAsJsonObject();
         JsonArray questsArray = statistics.get("quests").getAsJsonArray();
         quests.clear();
